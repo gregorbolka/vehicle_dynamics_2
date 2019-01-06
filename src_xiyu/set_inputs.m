@@ -9,6 +9,9 @@ inputs.dt = 0.001;
 inputs.time = (0:inputs.dt:6);
 n = length(inputs.time);
 
+% Initial velocity
+inputs.v0 = 15;
+
 % Other inputs are dependent on the model used. (eg. steering angle, engine
 % torque, ...)
 
