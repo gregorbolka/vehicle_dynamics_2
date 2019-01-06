@@ -9,11 +9,16 @@ inputs.dt = 0.001;
 inputs.time = (0:inputs.dt:6);
 n = length(inputs.time);
 
+% Initial velocity
+inputs.v0 = 15;
+
 % Other inputs are dependent on the model used. (eg. steering angle, engine
 % torque, ...)
 
 % Wheel Torque:
 inputs.T = [ones(1,n)*0; ones(1,n)*0; ones(1,n)*100; ones(1,n)*100];
+
+%inputs.T = [ones(1,n)*0; ones(1,n)*0; ones(1,n)*100 + GetTVSignal(inputs.dt)*90; ones(1,n)*100 + GetTVSignal(inputs.dt)*-90];  %With simple torque vectoring
 
 % Inclination of road:
 inputs.inclin_angle = 0*pi/180; % [rad]
