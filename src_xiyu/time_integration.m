@@ -13,13 +13,13 @@ function [X, data] = time_integration(vehicle_param, inputs)
 % given inputs with a FORWARD EULER INTEGRATION. 
 
 % Initialize state-space vector:
-v0 = 10;
+v0=inputs.v0;
 X = zeros(vehicle_param.n_dofs*2, length(inputs.time));
 X(vehicle_param.n_dofs+1) = v0;
-X(vehicle_param.n_dofs+4) = -v0/vehicle_param.r_w;
-X(vehicle_param.n_dofs+5) = -v0/vehicle_param.r_w;
-X(vehicle_param.n_dofs+6) = -v0/vehicle_param.r_w;
-X(vehicle_param.n_dofs+7) = -v0/vehicle_param.r_w;
+X(vehicle_param.n_dofs+4) = v0/vehicle_param.r_w;
+X(vehicle_param.n_dofs+5) = v0/vehicle_param.r_w;
+X(vehicle_param.n_dofs+6) = v0/vehicle_param.r_w;
+X(vehicle_param.n_dofs+7) = v0/vehicle_param.r_w;
 dX = zeros(vehicle_param.n_dofs*2, length(inputs.time));
 
 % Create waitbar to track simulation progress:
