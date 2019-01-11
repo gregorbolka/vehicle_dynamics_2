@@ -1,4 +1,4 @@
-function [Ffl, Ffr, Frl, Frr, F_aero, alpha] = get_tyre_forces(vehicle_param, inputs, X, dX_old, k)
+function [Ffl, Ffr, Frl, Frr, F_aero, alpha, slips] = get_tyre_forces(vehicle_param, inputs, X, dX_old, k)
 %get_tyre_forces calculate tyre forces for 4-wheel model
 % Velocity equals the velocity from the previous time-step:
 dX(1:vehicle_param.n_dofs) = X(vehicle_param.n_dofs+1:end);
@@ -42,6 +42,7 @@ alpha = [alpha_fl, alpha_fr, alpha_rl, alpha_rr];
 [srl, sign_Fxrl] = calc_slip(Vrl(1), omega_rl*r);
 [srr, sign_Fxrr] = calc_slip(Vrr(1), omega_rr*r);
 
+slips = [sfl;sfr;srl;srr];
 % % test
 % if sign(V_longf*omega_f) < 0
 %     flag = 1;
@@ -56,10 +57,10 @@ ay = -dX_old(vehicle_param.n_dofs + 1)*sin(phi) + dX_old(vehicle_param.n_dofs + 
 F_nf = (b*m*g*cos(theta) - F_aero*ha - h*m*g*sin(theta) - m*ax*h)/(a+b);
 F_nr = (a*m*g*cos(theta) + F_aero*ha  + h*m*g*sin(theta) + m*ax*h)/(a+b);
 delta_n = m*ay*h/t/2;
-F_nfl = F_nf/2 + delta_n;
-F_nfr = F_nf/2 - delta_n;
-F_nrl = F_nr/2 + delta_n;
-F_nrr = F_nr/2 - delta_n;
+F_nfl = F_nf/2 - delta_n;
+F_nfr = F_nf/2 + delta_n;
+F_nrl = F_nr/2 - delta_n;
+F_nrr = F_nr/2 + delta_n;
 %% Calculate tyre forces:
 Ffl = tyre_model_Dugoff(F_nfl, alpha_fl, sfl, vehicle_param.mu, vehicle_param.Cx_f, vehicle_param.Cy_f, sign_Fxfl);
 Ffr = tyre_model_Dugoff(F_nfr, alpha_fr, sfr, vehicle_param.mu, vehicle_param.Cx_f, vehicle_param.Cy_f, sign_Fxfr);
